@@ -4,6 +4,8 @@ Clasificador de imágenes que recibe una foto y decide si contiene una **fruta**
 
 Es un trabajo en equipo: el código está pensado para que cada integrante corra el mismo pipeline (local o en Colab) y aporte sus propias fotos.
 
+👉 **¿Eres parte del equipo y es tu primera vez aquí? Ve directo a [GUIA_EQUIPO.md](GUIA_EQUIPO.md)** — tiene el paso a paso completo (Kaggle, Colab, subir fotos, reentrenar).
+
 ## Idea general
 
 1. **Transfer learning**: en vez de entrenar una CNN desde cero (necesitaría muchísimos datos para ser robusta), se parte de **MobileNetV2** preentrenada en ImageNet y solo se reentrena la última capa para el problema binario. Generaliza mucho mejor con pocos datos propios.
