@@ -32,24 +32,40 @@ RUTA_MATRIZ_CONFUSION = RUTA_SALIDAS / "matriz_confusion.png"
 KAGGLE_DATASET_ID = "kritikseth/fruit-and-vegetable-image-recognition"
 
 # =========================================================
-# CLASES: fruta vs. verdura (criterio culinario/de verdulería, no botánico)
+# CLASES: fruta vs. verdura (criterio BOTÁNICO, a petición del profesor)
 # =========================================================
 # El dataset de Kaggle trae 36 carpetas con nombres de clase específicos
 # (manzana, zanahoria, etc.). Aquí se decide, UNA sola vez, a qué lado del
-# problema binario pertenece cada una. jitomate/pepino se clasifican como
-# verdura (uso culinario), aunque botánicamente sean frutos.
+# problema binario pertenece cada una.
+#
+# Criterio: "fruta" = estructura que se desarrolla del ovario de la flor y
+# contiene semillas (fruto, en sentido botánico), sin importar si en la
+# cocina se usa como fruta o como verdura. "Verdura" = el resto: raíz
+# (zanahoria, betabel, rábano, camote), tallo/bulbo (papa, cebolla, ajo,
+# jengibre) u hoja/flor (lechuga, espinaca, col, coliflor).
+#
+# Por eso jitomate, pepino, berenjena, todos los pimientos/chiles, elote y
+# chícharo/soya quedan como FRUTA aunque en la verdulería se vendan como
+# verdura — tienen semillas y vienen del ovario de la flor. Si se agregan
+# fotos propias de chayote (no está en el dataset de Kaggle), también va
+# en fruta por el mismo criterio.
 
 CLASES_FRUTA = {
     "apple", "banana", "grapes", "kiwi", "lemon", "mango",
     "orange", "pear", "pineapple", "pomegranate", "watermelon",
+    # botánicamente frutos, aunque se usen como verdura en la cocina:
+    "tomato", "cucumber", "eggplant",
+    "bell pepper", "capsicum", "chilli pepper", "paprika", "jalepeno",
+    "corn", "sweetcorn", "peas", "soy beans",
 }
 
 CLASES_VERDURA = {
-    "beetroot", "bell pepper", "cabbage", "capsicum", "carrot",
-    "cauliflower", "chilli pepper", "corn", "cucumber", "eggplant",
-    "garlic", "ginger", "jalepeno", "lettuce", "onion", "paprika",
-    "peas", "potato", "raddish", "soy beans", "spinach", "sweetcorn",
-    "sweetpotato", "tomato", "turnip",
+    # raíz:
+    "beetroot", "carrot", "raddish", "sweetpotato", "turnip",
+    # tallo / bulbo:
+    "potato", "onion", "garlic", "ginger",
+    # hoja / flor:
+    "cabbage", "cauliflower", "lettuce", "spinach",
 }
 
 ETIQUETAS = ["verdura", "fruta"]  # índice 0 = verdura, 1 = fruta (orden alfabético)
