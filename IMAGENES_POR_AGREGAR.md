@@ -4,6 +4,19 @@ El profe va a probar el modelo con **imágenes de internet**, así que de ahí t
 
 **Recordatorio del criterio (botánico):** *fruta* = viene del ovario de la flor y tiene semillas, aunque en la cocina se use como verdura. *Verdura* = todo lo demás: raíz, tubérculo, bulbo, tallo, hoja, flor o brote.
 
+## Descarga automática
+
+`herramientas/descargar_imagenes.py` baja unas 30 imágenes por especie de DuckDuckGo (enteras, cortadas, en montón). Quita las rotas, las chicas y las casi duplicadas, y las reduce a 800 px. Siempre hay que **revisarlas a mano** antes de moverlas al dataset:
+
+```powershell
+python -m pip install ddgs requests
+python herramientas/descargar_imagenes.py descargar --solo Calabacita Ruibarbo   # sin --solo baja todas
+# revisar descargas_revisar/ y borrar las malas
+python herramientas/descargar_imagenes.py mover
+```
+
+**Estado:** ya se agregaron las especies de las tablas de abajo (unas 15–30 revisadas por especie), excepto las hierbas de verdura: cilantro, perejil, quelites, romeritos, hierbabuena, hoja santa y chaya.
+
 ---
 
 ## Frutas por agregar
