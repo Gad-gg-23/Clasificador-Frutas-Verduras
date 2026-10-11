@@ -11,7 +11,6 @@ from pathlib import Path
 
 import torch
 import torch.nn.functional as F
-from PIL import Image
 
 import config
 import dataset
@@ -33,7 +32,7 @@ def cargar_modelo() -> torch.nn.Module:
 
 def predecir_imagen(modelo: torch.nn.Module, ruta_imagen: Path) -> dict:
     transform = dataset.transform_evaluacion()
-    imagen = Image.open(ruta_imagen).convert("RGB")
+    imagen = dataset.abrir_imagen(ruta_imagen)
     tensor = transform(imagen).unsqueeze(0).to(config.DISPOSITIVO)
 
     with torch.no_grad():

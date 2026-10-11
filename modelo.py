@@ -36,8 +36,17 @@ def crear_modelo(afinar_completo: bool = False) -> nn.Module:
     )
 
     if afinar_completo:
-        # Descongela el último bloque de 'features' para ajuste fino.
-        for parametro in modelo.features[-3:].parameters():
-            parametro.requires_grad = True
+        descongelar_ultimos_bloques(modelo, config.BLOQUES_A_DESCONGELAR)
 
     return modelo.to(config.DISPOSITIVO)
+
+
+def descongelar_ultimos_bloques(modelo: nn.Module, num_bloques: int) -> None:
+    """
+    Fase 2 del entrenamiento: vuelve entrenables los últimos `num_bloques`
+    de modelo.features (los que detectan patrones de alto nivel: formas,
+    texturas de cáscara, hojas...). Los primeros bloques (bordes, colores)
+    se dejan congelados porque eso ya lo aprendió bien en ImageNet.
+    """
+    for parametro in modelo.features[-num_bloques:].parameters():
+        parametro.requires_grad = True

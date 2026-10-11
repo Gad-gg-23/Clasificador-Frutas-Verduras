@@ -26,6 +26,7 @@ RUTA_MODELO = RUTA_SALIDAS / "modelo_frutas_verduras.pt"
 RUTA_HISTORICO_CSV = RUTA_SALIDAS / "historico_entrenamiento.csv"
 RUTA_METRICAS_CSV = RUTA_SALIDAS / "resultados_frutas_verduras.csv"
 RUTA_MATRIZ_CONFUSION = RUTA_SALIDAS / "matriz_confusion.png"
+RUTA_ERRORES_CSV = RUTA_SALIDAS / "errores_test.csv"  # imágenes de test mal clasificadas
 
 # Identificador del dataset en Kaggle (kagglehub.dataset_download lo descarga aquí).
 # https://www.kaggle.com/datasets/kritikseth/fruit-and-vegetable-image-recognition
@@ -99,14 +100,29 @@ def mapear_clase(nombre_carpeta: str) -> str:
 
 TAMANO_IMAGEN = 224          # tamaño de entrada esperado por MobileNetV2
 BATCH_SIZE = 32
-NUM_EPOCAS = 15
-TASA_APRENDIZAJE = 1e-3
-PACIENCIA_EARLY_STOPPING = 4  # épocas sin mejorar F1 de validación antes de parar
+PACIENCIA_EARLY_STOPPING = 4  # épocas sin mejorar F1 macro de validación antes de parar
 RANDOM_STATE = 42
 
-# Fracción de las fotos propias que se reserva como prueba "de ruido real"
-# (el resto se mezcla al entrenamiento). El dataset de Kaggle ya trae su
-# propio train/validation/test, así que esto solo aplica a fotos_propias/.
+# Entrenamiento en 2 fases (transfer learning clásico):
+#   Fase 1: backbone congelado, solo se entrena la cabeza nueva (lr alto).
+#   Fase 2: se descongelan los últimos bloques de MobileNetV2 y se ajustan
+#           con un lr 10x más bajo, para no destruir lo que ya sabía la red.
+# La fase 2 es la que adapta los filtros al "ruido" de las fotos propias.
+NUM_EPOCAS = 15                # máximo de la fase 1
+NUM_EPOCAS_AFINADO = 10        # máximo de la fase 2 (0 = no hacer fase 2)
+TASA_APRENDIZAJE = 1e-3        # fase 1
+TASA_APRENDIZAJE_AFINADO = 1e-4  # fase 2
+BLOQUES_A_DESCONGELAR = 4      # últimos bloques de modelo.features que se afinan
+
+# Con el criterio botánico hay muchas más clases de Kaggle del lado "fruta"
+# que del lado "verdura": se pesa la pérdida por clase para que el modelo no
+# gane accuracy simplemente diciendo "fruta" más seguido.
+USAR_PESOS_CLASE = True
+
+# Reparto de las fotos propias (estratificado por fruta/verdura). Ahora una
+# parte también va a VALIDACIÓN: así el early stopping y la elección del
+# mejor modelo también miran fotos con ruido, no solo las limpias de Kaggle.
+FRACCION_VAL_FOTOS_PROPIAS = 0.15
 FRACCION_PRUEBA_FOTOS_PROPIAS = 0.2
 
 DISPOSITIVO = torch.device("cuda" if torch.cuda.is_available() else "cpu")

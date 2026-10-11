@@ -8,15 +8,17 @@ Construcción del dataset binario (fruta / verdura) a partir de dos fuentes:
    distinto, etc.). Esta es la parte que "aplasta el ruido con datos": se
    combina con Kaggle y además se le aplica mucha más data augmentation.
 
-El resultado son 3 listas de (ruta_imagen, etiqueta): train / val / test,
+El resultado son 4 listas de (ruta_imagen, etiqueta): train / val /
+test_kaggle / test_propias,
 listas para envolver en ImagenesFrutaVerdura (Dataset de PyTorch).
 """
 
+import hashlib
 import random
 import time
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageOps
 from sklearn.model_selection import train_test_split
 from torch.utils.data import Dataset
 from torchvision import transforms
@@ -115,39 +117,103 @@ def indexar_fotos_propias() -> list[tuple[Path, str]]:
 # CONSTRUCCIÓN DE LOS 3 SPLITS (train / val / test)
 # =========================================================
 
+def _hash_archivo(ruta: Path) -> str:
+    return hashlib.md5(ruta.read_bytes()).hexdigest()
+
+
+def _quitar_duplicados_internos(items: list[tuple[Path, str]]) -> list[tuple[Path, str]]:
+    """Si la misma imagen (bytes idénticos) se subió dos veces, se queda solo una."""
+    vistos, unicos = set(), []
+    for ruta, etiqueta in items:
+        h = _hash_archivo(ruta)
+        if h not in vistos:
+            vistos.add(h)
+            unicos.append((ruta, etiqueta))
+    return unicos
+
+
+def _quitar_fugas(items: list[tuple[Path, str]], hashes_prohibidos: set[str]) -> list[tuple[Path, str]]:
+    """Quita de `items` toda imagen idéntica a alguna de otro split (fuga de datos)."""
+    return [(ruta, etq) for ruta, etq in items if _hash_archivo(ruta) not in hashes_prohibidos]
+
+
+def _hashes(items: list[tuple[Path, str]]) -> set[str]:
+    return {_hash_archivo(ruta) for ruta, _ in items}
+
+
+def _separar_estratificado(items, fraccion):
+    """train_test_split estratificado por fruta/verdura; devuelve (resto, separado)."""
+    if not items or fraccion <= 0:
+        return items, []
+    return train_test_split(
+        items,
+        test_size=fraccion,
+        random_state=config.RANDOM_STATE,
+        stratify=[etq for _, etq in items],
+    )
+
+
 def construir_splits() -> dict[str, list[tuple[Path, str]]]:
     """
-    - Usa los splits train/validation/test que ya trae Kaggle (evita fugas:
-      nunca se mezclan imágenes de train con las de test).
-    - Las fotos propias (ruido real del equipo) se reparten aparte con
-      train_test_split estratificado: una parte a train, una parte a test,
-      para medir específicamente qué tan bien generaliza al ruido real.
+    Devuelve 4 listas: train, val, test_kaggle y test_propias.
+
+    - Kaggle: se usan sus carpetas train/validation/test, pero se verifica
+      por hash que no haya la MISMA imagen en dos splits (en datasets
+      armados con imágenes de internet es común que validation/ y test/
+      compartan imágenes, o que alguna de train se repita en test). Lo
+      repetido se quita de train/val, nunca de test.
+      Si al hacerlo validation se queda casi vacío, la validación de Kaggle
+      se toma de un 10% de train.
+    - Fotos propias: se quitan duplicados exactos y se reparten
+      estratificadas en train / val / test. Que haya fotos propias en val
+      hace que el early stopping elija el modelo que mejor maneja el ruido.
+    - Los dos tests se reportan por separado: Kaggle (fotos "limpias") y
+      fotos propias (ruido real, la métrica que más importa).
     """
     raiz_kaggle = descargar_dataset_kaggle()
 
-    splits: dict[str, list[tuple[Path, str]]] = {"train": [], "val": [], "test": []}
-
+    kaggle: dict[str, list[tuple[Path, str]]] = {"train": [], "val": [], "test": []}
     mapa_nombres = {"train": "train", "val": "validation", "test": "test"}
     for clave, nombre_kaggle in mapa_nombres.items():
         carpeta = _buscar_carpeta_split(raiz_kaggle, nombre_kaggle)
         if carpeta is None:
             print(f"Aviso: no se encontró la carpeta '{nombre_kaggle}' en el dataset de Kaggle.")
             continue
-        splits[clave].extend(indexar_split_kaggle(carpeta))
+        kaggle[clave].extend(indexar_split_kaggle(carpeta))
 
-    fotos_propias = indexar_fotos_propias()
+    # --- Limpieza de fugas en Kaggle (test manda, train/val ceden) ---
+    hashes_test = _hashes(kaggle["test"])
+    val_original = len(kaggle["val"])
+    kaggle["val"] = _quitar_fugas(kaggle["val"], hashes_test)
+    train_original = len(kaggle["train"])
+    kaggle["train"] = _quitar_fugas(kaggle["train"], hashes_test | _hashes(kaggle["val"]))
+    print(f"Kaggle: {val_original - len(kaggle['val'])} imágenes de validation y "
+          f"{train_original - len(kaggle['train'])} de train eran idénticas a otro split y se quitaron.")
+
+    if len(kaggle["val"]) < 0.5 * val_original:
+        print("Kaggle: validation quedó casi vacío (era copia de test); "
+              "se toma un 10% de train como validación.")
+        kaggle["train"], val_extra = _separar_estratificado(kaggle["train"], 0.10)
+        kaggle["val"].extend(val_extra)
+
+    splits = {
+        "train": kaggle["train"],
+        "val": kaggle["val"],
+        "test_kaggle": kaggle["test"],
+        "test_propias": [],
+    }
+
+    fotos_propias = _quitar_duplicados_internos(indexar_fotos_propias())
     if fotos_propias:
-        etiquetas = [etq for _, etq in fotos_propias]
-        train_fp, test_fp = train_test_split(
-            fotos_propias,
-            test_size=config.FRACCION_PRUEBA_FOTOS_PROPIAS,
-            random_state=config.RANDOM_STATE,
-            stratify=etiquetas,
-        )
+        resto, test_fp = _separar_estratificado(fotos_propias, config.FRACCION_PRUEBA_FOTOS_PROPIAS)
+        # la fracción de val se expresa sobre el total, no sobre el resto
+        fraccion_val = config.FRACCION_VAL_FOTOS_PROPIAS / (1 - config.FRACCION_PRUEBA_FOTOS_PROPIAS)
+        train_fp, val_fp = _separar_estratificado(resto, fraccion_val)
         splits["train"].extend(train_fp)
-        splits["test"].extend(test_fp)
-        print(f"Fotos propias encontradas: {len(fotos_propias)} "
-              f"({len(train_fp)} a train, {len(test_fp)} a test).")
+        splits["val"].extend(val_fp)
+        splits["test_propias"].extend(test_fp)
+        print(f"Fotos propias (sin duplicados): {len(fotos_propias)} "
+              f"({len(train_fp)} a train, {len(val_fp)} a val, {len(test_fp)} a test).")
     else:
         print("Aviso: no hay fotos propias en data/fotos_propias/{fruta,verdura}/ todavía. "
               "Se entrena solo con el dataset de Kaggle (menos robusto al ruido real).")
@@ -186,9 +252,14 @@ def transform_entrenamiento() -> transforms.Compose:
 
 
 def transform_evaluacion() -> transforms.Compose:
-    """Sin augmentation: solo redimensionar y normalizar (val/test/predicción)."""
+    """
+    Sin augmentation (val/test/predicción). Se redimensiona el lado corto y
+    se recorta el centro, como en ImageNet: Resize((224, 224)) directo
+    aplastaba las fotos rectangulares y deformaba la fruta/verdura.
+    """
     return transforms.Compose([
-        transforms.Resize((config.TAMANO_IMAGEN, config.TAMANO_IMAGEN)),
+        transforms.Resize(int(config.TAMANO_IMAGEN * 256 / 224)),
+        transforms.CenterCrop(config.TAMANO_IMAGEN),
         transforms.ToTensor(),
         transforms.Normalize(_MEDIA_IMAGENET, _STD_IMAGENET),
     ])
@@ -197,6 +268,16 @@ def transform_evaluacion() -> transforms.Compose:
 # =========================================================
 # DATASET DE PYTORCH
 # =========================================================
+
+def abrir_imagen(ruta: Path) -> Image.Image:
+    """
+    Abre en RGB respetando la orientación EXIF: las fotos de celular se
+    guardan "acostadas" con una etiqueta que dice cómo rotarlas, y PIL no
+    la aplica sola.
+    """
+    with Image.open(ruta) as imagen:
+        return ImageOps.exif_transpose(imagen).convert("RGB")
+
 
 class ImagenesFrutaVerdura(Dataset):
     """Envuelve una lista de (ruta_imagen, etiqueta_texto) para PyTorch."""
@@ -210,7 +291,7 @@ class ImagenesFrutaVerdura(Dataset):
 
     def __getitem__(self, idx):
         ruta, etiqueta_texto = self.items[idx]
-        imagen = Image.open(ruta).convert("RGB")
+        imagen = abrir_imagen(ruta)
         imagen = self.transform(imagen)
         etiqueta = config.ETIQUETAS.index(etiqueta_texto)  # 0 = verdura, 1 = fruta
         return imagen, etiqueta
