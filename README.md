@@ -86,13 +86,15 @@ Entrenar en CPU funciona (ver resultados abajo) pero es más lento que en GPU. P
 
 ## Resultado actual
 
-> ⚠️ Los números de abajo son de la versión inicial: criterio culinario, sin fotos propias y con la validación/test de Kaggle sin depurar. Hay que reentrenar para tener resultados válidos con el criterio botánico y las fotos actuales.
+Criterio botánico, con ~3,700 fotos propias (unas 200 especies, incluidos los casos trampa). Entrenado en Colab (GPU T4): 9 épocas de cabeza + 10 de afinado.
 
-Entrenado en CPU local, 13 épocas con early stopping (~1-2 min/época):
+| Conjunto de test | Imágenes | Accuracy | Balanced Acc. | Precision | Recall | F1 | F1 macro |
+|---|---|---|---|---|---|---|---|
+| **Fotos propias (ruido real)** | 747 | **0.9304** | 0.9281 | 0.9528 | 0.9367 | 0.9447 | 0.9254 |
+| Kaggle (fotos limpias) | 359 | 0.9861 | 0.9824 | 0.9828 | 0.9956 | 0.9892 | 0.9848 |
+| Total | 1106 | 0.9485 | 0.9457 | 0.9628 | 0.9559 | 0.9593 | 0.9445 |
 
-| Accuracy | Precision | Recall | F1-Score |
-|---|---|---|---|
-| 0.9610 | 0.9439 | 0.9266 | 0.9352 |
+Los errores en fotos propias están repartidos (casi siempre 1 por especie). Los más frecuentes son verduras cortadas que parecen fruta (jícama, cúrcuma, papa rebanada) y frutas que parecen verdura (pepino rebanado, plátano macho, tamarindo). Ver `salidas/errores_test.csv`.
 
 ## Salidas
 
