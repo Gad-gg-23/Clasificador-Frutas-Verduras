@@ -17,6 +17,8 @@ python herramientas/descargar_imagenes.py mover
 
 **Estado:** ya se agregaron las especies de las tablas de abajo (unas 15–30 revisadas por especie), excepto las hierbas de verdura: cilantro, perejil, quelites, romeritos, hierbabuena, hoja santa y chaya.
 
+**2a tanda:** 1,134 imágenes más de 58 especies (las que van al final de `ESPECIES` en el script): trampas como calabaza butternut/espagueti, melón amargo, luffa, edamame, chile manzano y rábano sandía, más las frutas y verduras raras que faltaban de `frutas_verduras.csv`. Hongos y hierbas siguen fuera hasta confirmarlo con el profe. Ojo: ese CSV usa criterio de cocina (jitomate, chiles, calabacita, elote, etc. como verdura); aquí van como **fruta** por el criterio botánico.
+
 ---
 
 ## Frutas por agregar
