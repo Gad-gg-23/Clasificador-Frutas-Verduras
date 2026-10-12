@@ -1,0 +1,201 @@
+categoria,frecuencia,nombre_es,nombre_en
+fruta,comun,manzana,apple
+fruta,comun,plátano,banana
+fruta,comun,naranja,orange
+fruta,comun,limón,lemon
+fruta,comun,fresa,strawberry
+fruta,comun,uva,grape
+fruta,comun,sandía,watermelon
+fruta,comun,melón cantaloupe,cantaloupe
+fruta,comun,piña,pineapple
+fruta,comun,mango,mango
+fruta,comun,pera,pear
+fruta,comun,durazno,peach
+fruta,comun,cereza,cherry
+fruta,comun,ciruela,plum
+fruta,comun,kiwi,kiwi
+fruta,comun,papaya,papaya
+fruta,comun,aguacate,avocado
+fruta,comun,coco,coconut
+fruta,comun,mandarina,mandarin
+fruta,comun,toronja,grapefruit
+fruta,comun,lima,lime
+fruta,comun,frambuesa,raspberry
+fruta,comun,arándano azul,blueberry
+fruta,comun,zarzamora,blackberry
+fruta,comun,granada,pomegranate
+fruta,comun,higo,fig
+fruta,comun,guayaba,guava
+fruta,comun,chabacano,apricot
+fruta,comun,nectarina,nectarine
+fruta,comun,melón verde,honeydew
+fruta,poco_comun,maracuyá,passion fruit
+fruta,poco_comun,lichi,lychee
+fruta,poco_comun,caqui,persimmon
+fruta,poco_comun,tuna,prickly pear
+fruta,poco_comun,pitahaya,dragon fruit
+fruta,poco_comun,carambola,star fruit
+fruta,poco_comun,tamarindo,tamarind
+fruta,poco_comun,mamey,mamey sapote
+fruta,poco_comun,chirimoya,cherimoya
+fruta,poco_comun,zapote negro,black sapote
+fruta,poco_comun,nanche,nance
+fruta,poco_comun,jocote,hog plum
+fruta,poco_comun,tejocote,mexican hawthorn
+fruta,poco_comun,pomelo,pomelo
+fruta,poco_comun,kumquat,kumquat
+fruta,poco_comun,grosella roja,redcurrant
+fruta,poco_comun,grosella negra,blackcurrant
+fruta,poco_comun,mora (morera),mulberry
+fruta,poco_comun,uchuva,physalis
+fruta,poco_comun,feijoa,feijoa
+fruta,poco_comun,níspero,loquat
+fruta,poco_comun,membrillo,quince
+fruta,poco_comun,dátil,date
+fruta,poco_comun,mangostán,mangosteen
+fruta,poco_comun,rambután,rambutan
+fruta,poco_comun,longán,longan
+fruta,poco_comun,yaca,jackfruit
+fruta,poco_comun,guanábana,soursop
+fruta,poco_comun,anona,sugar apple
+fruta,poco_comun,pera asiática,asian pear
+fruta,poco_comun,clementina,clementine
+fruta,poco_comun,bergamota,bergamot
+fruta,poco_comun,yuzu,yuzu
+fruta,poco_comun,chicozapote,sapodilla
+fruta,poco_comun,pomarrosa,rose apple
+fruta,rara,durián,durian
+fruta,rara,salak,snake fruit
+fruta,rara,jabuticaba,jabuticaba
+fruta,rara,açaí,açaí
+fruta,rara,camu camu,camu camu
+fruta,rara,cupuaçu,cupuaçu
+fruta,rara,noni,noni
+fruta,rara,akee,ackee
+fruta,rara,fruta del pan,breadfruit
+fruta,rara,fruta milagrosa,miracle fruit
+fruta,rara,mano de Buda,buddha's hand
+fruta,rara,ugli,ugli fruit
+fruta,rara,kiwano,horned melon
+fruta,rara,rollinia,rollinia
+fruta,rara,abiu,abiu
+fruta,rara,bael,bael
+fruta,rara,santol,santol
+fruta,rara,langsat,langsat
+fruta,rara,pawpaw,pawpaw
+fruta,rara,níspero europeo,medlar
+fruta,rara,pulasan,pulasan
+fruta,rara,cempedak,cempedak
+fruta,rara,manzana de cera,wax apple
+fruta,rara,pitanga,surinam cherry
+fruta,rara,marañón,cashew apple
+fruta,rara,tamarillo,tamarillo
+fruta,rara,lulo (naranjilla),naranjilla
+fruta,rara,espino amarillo,sea buckthorn
+fruta,rara,baya de goji,goji berry
+fruta,rara,aronia,chokeberry
+fruta,rara,mora ártica,cloudberry
+fruta,rara,azufaifa,jujube
+fruta,rara,granadilla,sweet granadilla
+fruta,rara,marula,marula
+fruta,rara,mamoncillo,spanish lime
+verdura,comun,zanahoria,carrot
+verdura,comun,papa,potato
+verdura,comun,cebolla,onion
+verdura,comun,ajo,garlic
+verdura,comun,jitomate,tomato
+verdura,comun,lechuga,lettuce
+verdura,comun,pepino,cucumber
+verdura,comun,brócoli,broccoli
+verdura,comun,coliflor,cauliflower
+verdura,comun,espinaca,spinach
+verdura,comun,apio,celery
+verdura,comun,pimiento morrón,bell pepper
+verdura,comun,chile jalapeño,jalapeño
+verdura,comun,calabacita,zucchini
+verdura,comun,calabaza,pumpkin
+verdura,comun,elote,corn
+verdura,comun,chícharo,peas
+verdura,comun,ejote,green bean
+verdura,comun,berenjena,eggplant
+verdura,comun,col (repollo),cabbage
+verdura,comun,betabel,beet
+verdura,comun,rábano,radish
+verdura,comun,camote,sweet potato
+verdura,comun,champiñón,button mushroom
+verdura,comun,cebollín,spring onion
+verdura,comun,puerro,leek
+verdura,comun,acelga,swiss chard
+verdura,comun,nopal,cactus paddle
+verdura,comun,chayote,chayote
+verdura,comun,tomate verde,tomatillo
+verdura,comun,cilantro,cilantro
+verdura,comun,perejil,parsley
+verdura,comun,col de Bruselas,brussels sprouts
+verdura,comun,espárrago,asparagus
+verdura,comun,alcachofa,artichoke
+verdura,poco_comun,col rizada,kale
+verdura,poco_comun,rúcula,arugula
+verdura,poco_comun,endivia,endive
+verdura,poco_comun,achicoria,chicory
+verdura,poco_comun,radicchio,radicchio
+verdura,poco_comun,hinojo,fennel
+verdura,poco_comun,colinabo,kohlrabi
+verdura,poco_comun,nabo,turnip
+verdura,poco_comun,chirivía,parsnip
+verdura,poco_comun,rutabaga,rutabaga
+verdura,poco_comun,apio nabo,celeriac
+verdura,poco_comun,jícama,jicama
+verdura,poco_comun,yuca,cassava
+verdura,poco_comun,malanga,taro
+verdura,poco_comun,ñame,yam
+verdura,poco_comun,okra,okra
+verdura,poco_comun,bok choy,bok choy
+verdura,poco_comun,col napa,napa cabbage
+verdura,poco_comun,mizuna,mizuna
+verdura,poco_comun,daikon,daikon
+verdura,poco_comun,chalote,shallot
+verdura,poco_comun,jengibre,ginger
+verdura,poco_comun,cúrcuma,turmeric
+verdura,poco_comun,romanesco,romanesco
+verdura,poco_comun,berro,watercress
+verdura,poco_comun,verdolaga,purslane
+verdura,poco_comun,huauzontle,huauzontle
+verdura,poco_comun,flor de calabaza,squash blossom
+verdura,poco_comun,huitlacoche,corn smut
+verdura,poco_comun,hongo shiitake,shiitake
+verdura,poco_comun,hongo portobello,portobello
+verdura,poco_comun,seta,oyster mushroom
+verdura,poco_comun,edamame,edamame
+verdura,poco_comun,chile habanero,habanero pepper
+verdura,poco_comun,calabaza espagueti,spaghetti squash
+verdura,rara,salsifí,salsify
+verdura,rara,escorzonera,scorzonera
+verdura,rara,oca,oca
+verdura,rara,ulluco,ulluco
+verdura,rara,mashua,mashua
+verdura,rara,yacón,yacon
+verdura,rara,crosne,chinese artichoke
+verdura,rara,tupinambo,jerusalem artichoke
+verdura,rara,raíz de loto,lotus root
+verdura,rara,brotes de bambú,bamboo shoots
+verdura,rara,castaña de agua,water chestnut
+verdura,rara,helecho (fiddlehead),fiddlehead fern
+verdura,rara,salicornia,samphire
+verdura,rara,ajo silvestre,wild garlic
+verdura,rara,cardo,cardoon
+verdura,rara,espinaca de Nueva Zelanda,new zealand spinach
+verdura,rara,hojas de amaranto,amaranth greens
+verdura,rara,moringa,moringa
+verdura,rara,brócoli chino,gai lan
+verdura,rara,komatsuna,komatsuna
+verdura,rara,tatsoi,tatsoi
+verdura,rara,melón amargo,bitter melon
+verdura,rara,calabaza botella,bottle gourd
+verdura,rara,luffa,luffa
+verdura,rara,ube,purple yam
+verdura,rara,shiso,shiso
+verdura,rara,raíz de perejil,parsley root
+verdura,rara,chayotextle,chayote root
+verdura,rara,papa morada,purple potato
+verdura,rara,mitsuba,mitsuba
